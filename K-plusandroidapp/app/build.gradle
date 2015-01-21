@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    buildToolsVersion '20.0.0'
 
     defaultConfig {
         applicationId "com.kplus.android.k_plusandroidapp"
@@ -17,8 +17,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        mavenCentral()
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.github.kennyc1012:snackbar:1.0.3-SNAPSHOT:api11Release@aar'
+    compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.loopj.android:android-async-http:1.4.5'
+    compile 'com.github.eluleci:flatui:3.0.0'
+    compile files('libs/jackson-annotations-2.5.0.jar')
+    compile files('libs/jackson-core-2.5.0.jar')
+    compile files('libs/jackson-databind-2.5.0.jar')
 }
