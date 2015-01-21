@@ -63,6 +63,9 @@ public class LoginActivity extends Activity
         final String authentication = HashUtil.createHash(mEmailAddress.getText().toString(), mPassword.getText().toString());
 
         APIClient.header = authentication;
+
+        BaseFunctions.Log(TAG, authentication);
+
         APIClient.post("/login", null, new JsonHttpResponseHandler()
         {
             @Override

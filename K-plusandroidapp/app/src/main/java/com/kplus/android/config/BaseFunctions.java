@@ -35,9 +35,8 @@ public class BaseFunctions
             @Override
             public void run()
             {
-                SnackBar.show(activity, getErrorSnackBar(activity, "A error occured please try again!"));
+                SnackBar.show(activity, getErrorSnackBar(activity, "Een fout heeft zich voorgedaan probeer het alsjeblieft overnieuw!"));
             }
         });
-        //TODO: Error mail sturen dat er een fout voor gedaan is
     }
 }

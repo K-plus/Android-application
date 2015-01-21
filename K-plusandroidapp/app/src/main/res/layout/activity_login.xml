@@ -28,7 +28,7 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         app:floatingLabel="highlight"
-        app:floatingLabelText="Email"
+        app:floatingLabelText="@string/email_hint"
         android:hint="@string/email_hint"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
@@ -40,7 +40,7 @@
         android:inputType="textPassword"
         android:ems="10"
         app:floatingLabel="highlight"
-        app:floatingLabelText="Wachtwoord"
+        app:floatingLabelText="@string/password_hint"
         android:hint="@string/password_hint"/>
 
     <com.cengalabs.flatui.views.FlatButton
