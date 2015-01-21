@@ -2,7 +2,23 @@
 <resources>
 
     <string name="app_name">K-plus android app</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- title values -->
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_login">K-Plus</string>
+
+    <!-- Hints for the EditText -->
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Wachtwoord</string>
+
+    <!-- Values for buttons -->
+    <string name="button_login">Login</string>
+    <string name="button_register">Registreren</string>
+
+    <!-- Toast messages -->
+    <string name="failed_login">Er heeft zich een fout voorgedaan, probeer opnieuw in te loggen!</string>
+    <string name="success_login">Ingelogd!</string>
+    <string name="snackbar_error">Error</string>
 
 </resources>
