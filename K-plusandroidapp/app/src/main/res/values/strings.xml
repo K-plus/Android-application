@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">K-plus android app</string>
-    <string name="action_scanproduct">Scan</string>
+    <string name="action_addscanproduct">Scan+</string>
+    <string name="action_subscanproduct">Scan-</string>
 
     <!-- title values -->
     <string name="title_activity_main">MainActivity</string>
