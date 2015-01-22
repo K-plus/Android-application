@@ -9,7 +9,7 @@
     tools:context="com.kplus.android.activities.MainActivity">
 
     <TextView
-        android:text="123123"
+        android:text="Boodschappenlijstje hiero denk ik :D en ophalen bij openen van activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
