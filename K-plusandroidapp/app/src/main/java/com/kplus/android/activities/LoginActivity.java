@@ -10,11 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenny.snackbar.SnackBar;
 import com.kplus.android.config.APIClient;
 import com.kplus.android.config.BaseFunctions;
-import com.kplus.android.config.HashUtil;
 import com.kplus.android.config.SessionManager;
 import com.kplus.android.k_plusandroidapp.R;
 import com.kplus.android.models.jsonobjects.UserResponse;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -47,8 +47,6 @@ public class LoginActivity extends Activity
 
         if ( session.isLoggedIn() )
         {
-            APIClient.header = session.getToken();
-
             Intent startMain = new Intent(this, MainActivity.class);
                 startMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -60,13 +58,11 @@ public class LoginActivity extends Activity
     {
         BaseFunctions.Log(TAG, "Called Login method");
 
-        final String authentication = HashUtil.createHash(mEmailAddress.getText().toString(), mPassword.getText().toString());
+        RequestParams params = new RequestParams();
+            params.put("email", mEmailAddress.getText().toString());
+            params.put("password", mPassword.getText().toString());
 
-        APIClient.header = authentication;
-
-        BaseFunctions.Log(TAG, authentication);
-
-        APIClient.post("/login", null, new JsonHttpResponseHandler()
+        APIClient.post("/customer/login", params, new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response)
@@ -74,12 +70,11 @@ public class LoginActivity extends Activity
                 try
                 {
                     ObjectMapper mapper = new ObjectMapper();
-                    UserResponse user = mapper.readValue(response.toString(), UserResponse.class);
+                    UserResponse user = mapper.readValue(response.getJSONObject("data").toString(), UserResponse.class);
 
                     BaseFunctions.Log(TAG, "User: " + user.getEmail() + " Succesfully logged in");
 
-                    session.createLoginSession(user.getEmail(), user.getFirstname(), user.getLastname());
-                    session.setToken(authentication);
+                    session.createLoginSession(user.getEmail(), user.getName());
 
                     SnackBar.show(activity, getResources().getString(R.string.success_login));
 
@@ -90,10 +85,14 @@ public class LoginActivity extends Activity
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String errorMessage, Throwable throwable)
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
             {
-                BaseFunctions.Log(TAG, "Failed to login [Error: " + errorMessage + "]");
-                SnackBar.show(activity, BaseFunctions.getErrorSnackBar(activity, errorMessage));
+                try
+                {
+                    BaseFunctions.Log(TAG, "Failed to login [Error: " + response.getJSONObject("error").getString("message") + "]");
+                    SnackBar.show(activity, BaseFunctions.getErrorSnackBar(activity, response.getJSONObject("error").getString("message")));
+                }
+                catch(Exception e){BaseFunctions.handleException(activity, e);}
             }
         });
     }

@@ -19,10 +19,8 @@ public class SessionManager
 
     private String PREF_NAME = "com.kplus.android.v1";
     private String IS_LOGIN = "IsLoggedIn";
-    private String KEY_FIRSTNAME = "firstname";
-    private String KEY_LASTNAME = "lastname";
+    private String KEY_NAME = "name";
     private String KEY_EMAIL = "email";
-    private String KEY_TOKEN = "token";
 
     public SessionManager(Context context)
     {
@@ -31,12 +29,11 @@ public class SessionManager
         editor = pref.edit();
     }
 
-    public void createLoginSession(String email, String firstname, String lastname)
+    public void createLoginSession(String email, String name)
     {
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_FIRSTNAME, firstname);
-        editor.putString(KEY_LASTNAME, lastname);
+        editor.putString(KEY_NAME, name);
         editor.commit();
     }
 
@@ -66,9 +63,5 @@ public class SessionManager
     public boolean isLoggedIn()             { return pref.getBoolean(IS_LOGIN, false); }
 
     public String getEmail()                { return pref.getString(KEY_EMAIL, null); }
-    public String getFirstname()            { return pref.getString(KEY_FIRSTNAME, null); }
-    public String getLastname()             { return pref.getString(KEY_LASTNAME, null); }
-    public String getToken()                { return pref.getString(KEY_TOKEN, null); }
-
-    public void setToken(String s)          { editor.putString(KEY_TOKEN, s); editor.commit(); }
+    public String getName()                 { return pref.getString(KEY_NAME, null); }
 }

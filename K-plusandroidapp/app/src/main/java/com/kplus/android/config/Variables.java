@@ -5,9 +5,9 @@ package com.kplus.android.config;
  */
 public class Variables
 {
-    private static String IP     = "http://188.226.186.134";
+    private static String IP     = "http://kplus.santjuh.nl/";
 
-    public static String API_URL = IP + "/v1/api";
+    public static String API_URL = IP + "api/v1";
 
     public static boolean DEBUG  = true;
 }

@@ -8,40 +8,24 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
-        "firstname",
-        "lastname",
-        "email",
-        "password",
-        "status",
-        "avatar",
-        "createdAt"
+        "name",
+        "email"
 })
 public class UserResponse
 {
 
     @JsonProperty("id")
     private Integer id;
-    @JsonProperty("firstname")
-    private String firstname;
-    @JsonProperty("lastname")
-    private String lastname;
+    @JsonProperty("name")
+    private String name;
     @JsonProperty("email")
     private String email;
-    @JsonProperty("password")
-    private String password;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("avatar")
-    private String avatar;
-    @JsonProperty("createdAt")
-    private Date createdAt;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -64,39 +48,21 @@ public class UserResponse
     }
 
     /**
-     * @return The firstname
+     * @return The name
      */
-    @JsonProperty("firstname")
-    public String getFirstname()
+    @JsonProperty("name")
+    public String getName()
     {
-        return firstname;
+        return name;
     }
 
     /**
-     * @param firstname The firstname
+     * @param name The name
      */
-    @JsonProperty("firstname")
-    public void setFirstname(String firstname)
+    @JsonProperty("name")
+    public void setName(String name)
     {
-        this.firstname = firstname;
-    }
-
-    /**
-     * @return The lastname
-     */
-    @JsonProperty("lastname")
-    public String getLastname()
-    {
-        return lastname;
-    }
-
-    /**
-     * @param lastname The lastname
-     */
-    @JsonProperty("lastname")
-    public void setLastname(String lastname)
-    {
-        this.lastname = lastname;
+        this.name = name;
     }
 
     /**
@@ -115,78 +81,6 @@ public class UserResponse
     public void setEmail(String email)
     {
         this.email = email;
-    }
-
-    /**
-     * @return The password
-     */
-    @JsonProperty("password")
-    public String getPassword()
-    {
-        return password;
-    }
-
-    /**
-     * @param password The password
-     */
-    @JsonProperty("password")
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    /**
-     * @return The status
-     */
-    @JsonProperty("status")
-    public String getStatus()
-    {
-        return status;
-    }
-
-    /**
-     * @param status The status
-     */
-    @JsonProperty("status")
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
-
-    /**
-     * @return The avatar
-     */
-    @JsonProperty("avatar")
-    public String getAvatar()
-    {
-        return avatar;
-    }
-
-    /**
-     * @param avatar The avatar
-     */
-    @JsonProperty("avatar")
-    public void setAvatar(String avatar)
-    {
-        this.avatar = avatar;
-    }
-
-    /**
-     * @return The createdAt
-     */
-    @JsonProperty("createdAt")
-    public Date getCreatedAt()
-    {
-        return createdAt;
-    }
-
-    /**
-     * @param createdAt The createdAt
-     */
-    @JsonProperty("createdAt")
-    public void setCreatedAt(Date createdAt)
-    {
-        this.createdAt = createdAt;
     }
 
     @JsonAnyGetter

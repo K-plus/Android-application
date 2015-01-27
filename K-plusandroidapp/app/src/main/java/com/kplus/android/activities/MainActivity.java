@@ -7,12 +7,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kplus.android.config.APIClient;
 import com.kplus.android.config.BaseFunctions;
+import com.kplus.android.config.SessionManager;
 import com.kplus.android.k_plusandroidapp.R;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 public class MainActivity extends Activity
 {
     private final String TAG = "MainActivity";
+    private SessionManager session;
+    private MainActivity activity = this;
     private final int SCAN_BARCODE = 1;
     private final int SCAN_ADD = 2;
     private final int SCAN_SUB = 0;
@@ -22,6 +31,34 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        session = new SessionManager(getApplicationContext());
+
+        loadShoppingList();
+    }
+
+    private void loadShoppingList()
+    {
+        //Code om iets met de cart te doen :p en op te halen.
+        //The floor is yours Bas
+        
+        BaseFunctions.Log(TAG, "Called loadShoppingList() method");
+
+        RequestParams params = new RequestParams();
+            params.put("email", session.getEmail());
+
+        APIClient.post("/cart", params, new JsonHttpResponseHandler()
+        {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+            {
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
+            {
+            }
+        });
     }
 
     private void scanBarcode(int addToChart)
