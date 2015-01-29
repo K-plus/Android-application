@@ -6,8 +6,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 
 /**
  * Created by Vasco on 21-1-2015.
@@ -21,8 +19,14 @@ public class APIClient
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
     {
-        if(Looper.myLooper() == null){client = new SyncHttpClient();}
-        else{client = new AsyncHttpClient();}
+        if (Looper.myLooper() == null)
+        {
+            client = new SyncHttpClient();
+        }
+        else
+        {
+            client = new AsyncHttpClient();
+        }
 
         setCredentials();
         BaseFunctions.Log(TAG, "Sending GET request to: " + BASE_URL + url);
@@ -31,8 +35,14 @@ public class APIClient
 
     public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
     {
-        if(Looper.myLooper() == null){client = new SyncHttpClient();}
-        else{client = new AsyncHttpClient();}
+        if (Looper.myLooper() == null)
+        {
+            client = new SyncHttpClient();
+        }
+        else
+        {
+            client = new AsyncHttpClient();
+        }
 
         setCredentials();
         BaseFunctions.Log(TAG, "Sending POST request to: " + BASE_URL + url);
@@ -41,17 +51,26 @@ public class APIClient
 
     public static void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
     {
-        if(Looper.myLooper() == null){client = new SyncHttpClient();}
-        else{client = new AsyncHttpClient();}
+        if (Looper.myLooper() == null)
+        {
+            client = new SyncHttpClient();
+        }
+        else
+        {
+            client = new AsyncHttpClient();
+        }
 
         setCredentials();
         BaseFunctions.Log(TAG, "Sending POST request to: " + BASE_URL + url);
         client.put(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    private static void setCredentials() {
-        if(sessionManager != null)
+    private static void setCredentials()
+    {
+        if (sessionManager != null)
+        {
             client.setBasicAuth(sessionManager.getEmail(), sessionManager.getPass());
+        }
     }
 
     private static String getAbsoluteUrl(String relativeUrl)
@@ -59,7 +78,8 @@ public class APIClient
         return BASE_URL + relativeUrl;
     }
 
-    public static void setSession(SessionManager session) {
+    public static void setSession(SessionManager session)
+    {
         sessionManager = session;
     }
 }

@@ -16,7 +16,8 @@ import java.util.Map;
         "product"
 })
 
-public class CartResponse {
+public class CartResponse
+{
 
     @JsonProperty("cart_id")
     private Integer cartId;
@@ -30,43 +31,53 @@ public class CartResponse {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
-    public Integer getCartId() {
+    public Integer getCartId()
+    {
         return cartId;
     }
 
-    public void setCartId(Integer cartId) {
+    public void setCartId(Integer cartId)
+    {
         this.cartId = cartId;
     }
 
-    public Integer getTotalItems() {
+    public Integer getTotalItems()
+    {
         return totalItems;
     }
 
-    public void setTotalItems(Integer totalItems) {
+    public void setTotalItems(Integer totalItems)
+    {
         this.totalItems = totalItems;
     }
 
-    public Integer getTotalPrice() {
+    public Integer getTotalPrice()
+    {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Integer totalPrice)
+    {
         this.totalPrice = totalPrice;
     }
 
-    public ArrayList<CartLineResponse> getCartLines() {
+    public ArrayList<CartLineResponse> getCartLines()
+    {
         return cartLines;
     }
 
-    public void setCartLines(ArrayList<CartLineResponse> cartLines) {
+    public void setCartLines(ArrayList<CartLineResponse> cartLines)
+    {
         this.cartLines = cartLines;
     }
 
-    public Map<String, Object> getAdditionalProperties() {
+    public Map<String, Object> getAdditionalProperties()
+    {
         return additionalProperties;
     }
 
-    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+    public void setAdditionalProperties(Map<String, Object> additionalProperties)
+    {
         this.additionalProperties = additionalProperties;
     }
 }

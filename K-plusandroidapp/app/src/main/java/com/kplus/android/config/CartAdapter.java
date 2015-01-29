@@ -1,6 +1,5 @@
 package com.kplus.android.config;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -9,14 +8,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.kplus.android.activities.MainActivity;
 import com.kplus.android.k_plusandroidapp.R;
 import com.kplus.android.models.jsonobjects.CartLineResponse;
 import com.kplus.android.models.jsonobjects.CartResponse;
-import com.kplus.android.models.jsonobjects.ProductResponse;
+
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +23,8 @@ import java.util.Iterator;
 /**
  * Created by bas on 23-1-15.
  */
-public class CartAdapter extends BaseAdapter {
+public class CartAdapter extends BaseAdapter
+{
 
     private final String EURO_STRING = "€";
     private final String QTY_STRING = "Aantal: ";
@@ -34,35 +34,45 @@ public class CartAdapter extends BaseAdapter {
     private MainActivity activity;
     private HashMap<String, Integer> scannedProducts;
 
-    public CartAdapter(MainActivity activity) {
+    public CartAdapter(MainActivity activity)
+    {
         this.activity = activity;
         this.groceryList = new ArrayList<CartLineResponse>();
         scannedProducts = resetScannedProducts();
         //scannedProducts = new HashMap<String, Integer>();
     }
 
-    public CartResponse getCart() {
+    public CartResponse getCart()
+    {
         return cart;
     }
 
-    public void setCart(CartResponse cart) {
+    public void setCart(CartResponse cart)
+    {
         this.cart = cart;
         this.groceryList = cart.getCartLines();
     }
 
-    public CartLineResponse getCartlineWithProductId(int productId) {
-        for(CartLineResponse cartLine : groceryList) {
-            if(cartLine.getProduct().getId() == productId) {
+    public CartLineResponse getCartlineWithProductId(int productId)
+    {
+        for (CartLineResponse cartLine : groceryList)
+        {
+            if (cartLine.getProduct().getId() == productId)
+            {
                 return cartLine;
             }
         }
         return null;
     }
 
-    public void updateCartLine(CartLineResponse cartLine, int update) {
-        if(scannedProducts.containsKey(Integer.toString(cartLine.getProduct().getId()))) {
+    public void updateCartLine(CartLineResponse cartLine, int update)
+    {
+        if (scannedProducts.containsKey(Integer.toString(cartLine.getProduct().getId())))
+        {
             scannedProducts.put(Integer.toString(cartLine.getProduct().getId()), scannedProducts.get(Integer.toString(cartLine.getProduct().getId())) + update);
-        }else if(update > 0) {
+        }
+        else if (update > 0)
+        {
             scannedProducts.put(Integer.toString(cartLine.getProduct().getId()), update);
         }
         saveScannedProducts();
@@ -70,24 +80,29 @@ public class CartAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return groceryList.size();
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(int position)
+    {
         return groceryList.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int position)
+    {
         return groceryList.get(position).getId();
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         ViewHolder holder;
-        if (convertView == null) {
+        if (convertView == null)
+        {
 
             holder = new ViewHolder();
 
@@ -100,35 +115,46 @@ public class CartAdapter extends BaseAdapter {
             holder.scanned = (TextView) convertView.findViewById(R.id.scanned);
 
             convertView.setTag(holder);
-        } else {
+        }
+        else
+        {
             holder = (ViewHolder) convertView.getTag();
         }
 
         CartLineResponse cartLine = groceryList.get(position);
         holder.name.setText(cartLine.getProduct().getName());
-        holder.price.setText(EURO_STRING + Double.toString(((double)cartLine.getProduct().getPrice())/100));
+        holder.price.setText(EURO_STRING + Double.toString(((double) cartLine.getProduct().getPrice()) / 100));
         holder.qty.setText(QTY_STRING + Integer.toString(cartLine.getQty()));
         Integer scannedInt = new Integer(0);
-        if(scannedProducts != null) {
-            if(scannedProducts.size() > 0)
+        if (scannedProducts != null)
+        {
+            if (scannedProducts.size() > 0)
+            {
                 scannedInt = scannedProducts.get(Integer.toString(cartLine.getProduct().getId()));
+            }
         }
-        if(scannedInt == null)
+        if (scannedInt == null)
+        {
             scannedInt = new Integer(0);
+        }
         holder.scanned.setText("Scanned: " + scannedInt.intValue());
 
-        LinearLayout layout = (LinearLayout)convertView.findViewById(R.id.row_layout);
+        LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.row_layout);
 
-        if(cartLine.getQty() == scannedInt.intValue()) {
+        if (cartLine.getQty() == scannedInt.intValue())
+        {
             layout.setBackgroundColor(activity.getResources().getColor(R.color.DarkGreen));
-        }else{
+        }
+        else
+        {
             layout.setBackgroundColor(activity.getResources().getColor(R.color.blood_dark));
         }
 
         return convertView;
     }
 
-    private void saveScannedProducts() {
+    private void saveScannedProducts()
+    {
         SharedPreferences keyValues = activity.getApplicationContext().getSharedPreferences(SessionManager.PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor keyValuesEditor = keyValues.edit();
 
@@ -138,33 +164,40 @@ public class CartAdapter extends BaseAdapter {
         keyValuesEditor.commit();
     }
 
-    private HashMap<String, Integer> resetScannedProducts() {
+    private HashMap<String, Integer> resetScannedProducts()
+    {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
         SharedPreferences keyValues = activity.getApplicationContext().getSharedPreferences(SessionManager.PREF_NAME, Context.MODE_PRIVATE);
 
-        try {
+        try
+        {
             String jsonMapString = keyValues.getString("HashMap", null);
             JSONObject jsonObject = new JSONObject(jsonMapString);
             Iterator<String> keysItr = jsonObject.keys();
-            while(keysItr.hasNext()) {
+            while (keysItr.hasNext())
+            {
                 String key = keysItr.next();
-                Integer value = (Integer)jsonObject.get(key);
+                Integer value = (Integer) jsonObject.get(key);
                 map.put(key, value);
             }
-            return  map;
-        }catch (Exception e) {
+            return map;
+        }
+        catch (Exception e)
+        {
             BaseFunctions.handleException(activity, e);
         }
         return map;
     }
 
-    private class ViewHolder {
+    private class ViewHolder
+    {
         public TextView name;
         public TextView price;
         public TextView qty;
         public TextView scanned;
 
-        public ViewHolder() {
+        public ViewHolder()
+        {
             name = new TextView(activity.getApplicationContext());
             price = new TextView(activity.getApplicationContext());
             qty = new TextView(activity.getApplicationContext());

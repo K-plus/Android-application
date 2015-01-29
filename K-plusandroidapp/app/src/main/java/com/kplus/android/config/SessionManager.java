@@ -66,16 +66,30 @@ public class SessionManager implements Serializable
         context.startActivity(i);
     }
 
-    public boolean isLoggedIn() {
+    public boolean isLoggedIn()
+    {
         boolean isLoggedIn = pref.getBoolean(IS_LOGIN, false);
 
-        if(isLoggedIn)
+        if (isLoggedIn)
+        {
             APIClient.setSession(this);
+        }
 
         return isLoggedIn;
     }
 
-    public String getEmail()                { return pref.getString(KEY_EMAIL, null); }
-    public String getName()                 { return pref.getString(KEY_NAME, null); }
-    public String getPass()                 { return pref.getString(KEY_PASSWORD, null); }
+    public String getEmail()
+    {
+        return pref.getString(KEY_EMAIL, null);
+    }
+
+    public String getName()
+    {
+        return pref.getString(KEY_NAME, null);
+    }
+
+    public String getPass()
+    {
+        return pref.getString(KEY_PASSWORD, null);
+    }
 }

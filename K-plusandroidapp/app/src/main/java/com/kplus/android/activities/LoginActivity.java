@@ -11,7 +11,6 @@ import com.kenny.snackbar.SnackBar;
 import com.kplus.android.config.APIClient;
 import com.kplus.android.config.BaseFunctions;
 import com.kplus.android.config.SessionManager;
-import com.kplus.android.config.Variables;
 import com.kplus.android.k_plusandroidapp.R;
 import com.kplus.android.models.jsonobjects.UserResponse;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -46,11 +45,11 @@ public class LoginActivity extends Activity
 
         session = new SessionManager(getApplicationContext());
 
-        if ( session.isLoggedIn() )
+        if (session.isLoggedIn())
         {
             Intent startMain = new Intent(this, MainActivity.class);
-                startMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             LoginActivity.this.startActivity(startMain);
         }
     }
@@ -60,8 +59,8 @@ public class LoginActivity extends Activity
         BaseFunctions.Log(TAG, "Called Login method");
 
         RequestParams params = new RequestParams();
-            params.put("email", mEmailAddress.getText().toString());
-            params.put("password", mPassword.getText().toString());
+        params.put("email", mEmailAddress.getText().toString());
+        params.put("password", mPassword.getText().toString());
 
         APIClient.post("/customer/login", params, new JsonHttpResponseHandler()
         {
@@ -84,7 +83,10 @@ public class LoginActivity extends Activity
                     Intent startMain = new Intent(activity, MainActivity.class);
                     startActivity(startMain);
                 }
-                catch(Exception e){BaseFunctions.handleException(activity, e);}
+                catch (Exception e)
+                {
+                    BaseFunctions.handleException(activity, e);
+                }
             }
 
             @Override
@@ -95,7 +97,10 @@ public class LoginActivity extends Activity
                     BaseFunctions.Log(TAG, "Failed to login [Error: " + response.getJSONObject("error").getString("message") + "]");
                     SnackBar.show(activity, BaseFunctions.getErrorSnackBar(activity, response.getJSONObject("error").getString("message")));
                 }
-                catch(Exception e){BaseFunctions.handleException(activity, e);}
+                catch (Exception e)
+                {
+                    BaseFunctions.handleException(activity, e);
+                }
             }
         });
     }

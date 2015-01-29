@@ -18,7 +18,8 @@ import java.util.Map;
         "ean",
         "stock"
 })
-public class ProductResponse {
+public class ProductResponse
+{
 
     @JsonProperty("id")
     private Integer id;
@@ -34,112 +35,104 @@ public class ProductResponse {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
-     *
-     * @return
-     * The id
+     * @return The id
      */
     @JsonProperty("id")
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
     /**
-     *
-     * @param id
-     * The id
+     * @param id The id
      */
     @JsonProperty("id")
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
     /**
-     *
-     * @return
-     * The name
+     * @return The name
      */
     @JsonProperty("name")
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
     /**
-     *
-     * @param name
-     * The name
+     * @param name The name
      */
     @JsonProperty("name")
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
     /**
-     *
-     * @return
-     * The price
+     * @return The price
      */
     @JsonProperty("price")
-    public Integer getPrice() {
+    public Integer getPrice()
+    {
         return price;
     }
 
     /**
-     *
-     * @param price
-     * The price
+     * @param price The price
      */
     @JsonProperty("price")
-    public void setPrice(Integer price) {
+    public void setPrice(Integer price)
+    {
         this.price = price;
     }
 
     /**
-     *
-     * @return
-     * The ean
+     * @return The ean
      */
     @JsonProperty("ean")
-    public String getEan() {
+    public String getEan()
+    {
         return ean;
     }
 
     /**
-     *
-     * @param ean
-     * The ean
+     * @param ean The ean
      */
     @JsonProperty("ean")
-    public void setEan(String ean) {
+    public void setEan(String ean)
+    {
         this.ean = ean;
     }
 
     /**
-     *
-     * @return
-     * The stock
+     * @return The stock
      */
     @JsonProperty("stock")
-    public Integer getStock() {
+    public Integer getStock()
+    {
         return stock;
     }
 
     /**
-     *
-     * @param stock
-     * The stock
+     * @param stock The stock
      */
     @JsonProperty("stock")
-    public void setStock(Integer stock) {
+    public void setStock(Integer stock)
+    {
         this.stock = stock;
     }
 
     @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
+    public Map<String, Object> getAdditionalProperties()
+    {
         return this.additionalProperties;
     }
 
     @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
+    public void setAdditionalProperty(String name, Object value)
+    {
         this.additionalProperties.put(name, value);
     }
 

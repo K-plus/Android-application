@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import com.kplus.android.config.QRPreview;
 import com.kplus.android.k_plusandroidapp.R;
+
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.ImageScanner;
@@ -20,23 +21,25 @@ import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 
 
-public class QRScanActivity extends Activity {
+public class QRScanActivity extends Activity
+{
 
     private Camera mCamera;
     private QRPreview mPreview;
     private Handler autoFocusHandler;
-
 
     ImageScanner scanner;
 
     private boolean barcodeScanned = false;
     private boolean previewing = true;
 
-    static {
+    static
+    {
         System.loadLibrary("iconv");
     }
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_qrscan);
@@ -52,32 +55,41 @@ public class QRScanActivity extends Activity {
         scanner.setConfig(0, Config.Y_DENSITY, 3);
 
         mPreview = new QRPreview(this, mCamera, previewCb, autoFocusCB);
-        FrameLayout preview = (FrameLayout)findViewById(R.id.cameraPreview);
+        FrameLayout preview = (FrameLayout) findViewById(R.id.cameraPreview);
         preview.addView(mPreview);
 
         mCamera.setPreviewCallback(previewCb);
         mCamera.startPreview();
         previewing = true;
-        mCamera.autoFocus(autoFocusCB);
+//        mCamera.autoFocus(autoFocusCB);
     }
 
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         releaseCamera();
     }
 
-    /** A safe way to get an instance of the Camera object. */
-    public static Camera getCameraInstance(){
+    /**
+     * A safe way to get an instance of the Camera object.
+     */
+    public static Camera getCameraInstance()
+    {
         Camera c = null;
-        try {
+        try
+        {
             c = Camera.open();
-        } catch (Exception e){
+        }
+        catch (Exception e)
+        {
         }
         return c;
     }
 
-    private void releaseCamera() {
-        if (mCamera != null) {
+    private void releaseCamera()
+    {
+        if (mCamera != null)
+        {
             previewing = false;
             mCamera.setPreviewCallback(null);
             mCamera.release();
@@ -86,15 +98,21 @@ public class QRScanActivity extends Activity {
     }
 
 
-    private Runnable doAutoFocus = new Runnable() {
-        public void run() {
+    private Runnable doAutoFocus = new Runnable()
+    {
+        public void run()
+        {
             if (previewing)
+            {
                 mCamera.autoFocus(autoFocusCB);
+            }
         }
     };
 
-    PreviewCallback previewCb = new PreviewCallback() {
-        public void onPreviewFrame(byte[] data, Camera camera) {
+    PreviewCallback previewCb = new PreviewCallback()
+    {
+        public void onPreviewFrame(byte[] data, Camera camera)
+        {
             Camera.Parameters parameters = camera.getParameters();
             Size size = parameters.getPreviewSize();
 
@@ -103,7 +121,8 @@ public class QRScanActivity extends Activity {
 
             int result = scanner.scanImage(barcode);
 
-            if (result != 0) {
+            if (result != 0)
+            {
                 previewing = false;
                 mCamera.setPreviewCallback(null);
                 mCamera.stopPreview();
@@ -111,7 +130,8 @@ public class QRScanActivity extends Activity {
                 SymbolSet syms = scanner.getResults();
                 Intent intent = getIntent();
                 int i = 0;
-                for (Symbol sym : syms) {
+                for (Symbol sym : syms)
+                {
                     //scanText.setText("Result: " + sym.getData());
                     barcodeScanned = true;
                     intent.putExtra("sym" + i, sym.getData().toString());
@@ -125,11 +145,16 @@ public class QRScanActivity extends Activity {
 
 
     // Mimic continuous auto-focusing
-    AutoFocusCallback autoFocusCB = new AutoFocusCallback() {
-        public void onAutoFocus(boolean success, Camera camera) {
-            try{
+    AutoFocusCallback autoFocusCB = new AutoFocusCallback()
+    {
+        public void onAutoFocus(boolean success, Camera camera)
+        {
+            try
+            {
                 autoFocusHandler.postDelayed(doAutoFocus, 500);
-            }catch(Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
 

@@ -15,7 +15,10 @@ public class BaseFunctions
 {
     public static void Log(String TAG, String message)
     {
-        if(Variables.DEBUG){Log.d(TAG, message);}
+        if (Variables.DEBUG)
+        {
+            Log.d(TAG, message);
+        }
     }
 
     public static SnackBarItem getErrorSnackBar(Context context, String errorMessage)
