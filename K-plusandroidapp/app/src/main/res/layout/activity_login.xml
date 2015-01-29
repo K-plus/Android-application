@@ -29,7 +29,8 @@
         android:ems="10"
         app:floatingLabel="highlight"
         app:floatingLabelText="@string/email_hint"
-        android:hint="@string/email_hint"/>
+        android:hint="@string/email_hint"
+            android:text="helderbas@gmail.com"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/et_Password"
@@ -41,7 +42,8 @@
         android:ems="10"
         app:floatingLabel="highlight"
         app:floatingLabelText="@string/password_hint"
-        android:hint="@string/password_hint"/>
+        android:hint="@string/password_hint"
+            android:text="password"/>
 
     <com.cengalabs.flatui.views.FlatButton
         android:id="@+id/btn_Login"
