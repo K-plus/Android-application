@@ -11,6 +11,7 @@ import com.kenny.snackbar.SnackBar;
 import com.kplus.android.config.APIClient;
 import com.kplus.android.config.BaseFunctions;
 import com.kplus.android.config.SessionManager;
+import com.kplus.android.config.Variables;
 import com.kplus.android.k_plusandroidapp.R;
 import com.kplus.android.models.jsonobjects.UserResponse;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -74,7 +75,9 @@ public class LoginActivity extends Activity
 
                     BaseFunctions.Log(TAG, "User: " + user.getEmail() + " Succesfully logged in");
 
-                    session.createLoginSession(user.getEmail(), user.getName());
+                    session.createLoginSession(user.getEmail(), user.getName(), mPassword.getText().toString());
+
+                    //APIClient.setCredentials(user.getEmail(), mPassword.getText().toString());
 
                     SnackBar.show(activity, getResources().getString(R.string.success_login));
 

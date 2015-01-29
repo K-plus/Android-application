@@ -21,5 +21,8 @@
     <string name="failed_login">Er heeft zich een fout voorgedaan, probeer opnieuw in te loggen!</string>
     <string name="success_login">Ingelogd!</string>
     <string name="snackbar_error">Error</string>
+    <string name="title_activity_qr">QRScanActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
