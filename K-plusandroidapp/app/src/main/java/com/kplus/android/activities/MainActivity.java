@@ -2,8 +2,11 @@ package com.kplus.android.activities;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -23,6 +26,7 @@ import com.kplus.android.config.CartAdapter;
 import com.kplus.android.config.ProductOnClickListener;
 import com.kplus.android.config.SessionManager;
 import com.kplus.android.k_plusandroidapp.R;
+import com.kplus.android.models.WinkelLocatie;
 import com.kplus.android.models.jsonobjects.CartLineResponse;
 import com.kplus.android.models.jsonobjects.CartResponse;
 import com.kplus.android.models.jsonobjects.ProductResponse;
@@ -63,6 +67,9 @@ public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefM
 
         loadShoppingList();
         checkIfNFCIsAvailable();
+
+        checkIfInStoreRange();
+
     }
 
     @Override
@@ -160,6 +167,35 @@ public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefM
         if (!nfcAdapter.isEnabled()){SnackBar.show(this, "Schakel NFC alsjeblieft in.");}
     }
 
+    private void checkIfInStoreRange()
+    {
+        Location latestKnownLocation = getGPS();
+
+        if(latestKnownLocation != null)
+        {
+            BaseFunctions.Log(TAG, "Latitude" + latestKnownLocation.getLatitude());
+            BaseFunctions.Log(TAG, "Longitude" + latestKnownLocation.getLongitude());
+
+            WinkelLocatie winkelInRange = BaseFunctions.inStoreRange(latestKnownLocation);
+
+            if(winkelInRange != null)
+            {
+                BaseFunctions.Log(TAG, "Gebruiker is in range van de winkel: " + winkelInRange.getName());
+
+                SnackBar.show(this, "KAAS VOOR 5 EURO KOOP T NU :D");
+                //Todo ad laten zien hiero :D
+            }
+            else
+            {
+                BaseFunctions.Log(TAG, "Geen winkel in range!");
+            }
+        }
+        else
+        {
+            BaseFunctions.Log(TAG, "latestKnownLocation is null");
+        }
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
         int productID = Integer.parseInt(intent.getStringExtra("sym0"));
@@ -232,11 +268,27 @@ public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefM
     @Override
     public NdefMessage createNdefMessage(NfcEvent nfcEvent)
     {
-        BaseFunctions.Log(TAG, "Message to send: " + billToSend);
-        BaseFunctions.Log(TAG, "Sending NFC Bill");
         NdefRecord ndefRecord = NdefRecord.createMime("text/plain", billToSend.getBytes());
         NdefMessage ndefMessage = new NdefMessage(ndefRecord);
         return ndefMessage;
+    }
+
+    private Location getGPS()
+    {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+
+        /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/
+        Location location = null;
+
+        for (int i=providers.size()-1; i>=0; i--)
+        {
+            location = locationManager.getLastKnownLocation(providers.get(i));
+            if (location != null) break;
+        }
+
+        if (location != null){ return location; }
+        else{ return null; }
     }
 
     @Override

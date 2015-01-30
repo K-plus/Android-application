@@ -2,17 +2,28 @@ package com.kplus.android.config;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import com.kenny.snackbar.SnackBar;
 import com.kenny.snackbar.SnackBarItem;
 import com.kplus.android.k_plusandroidapp.R;
+import com.kplus.android.models.WinkelLocatie;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Vasco on 21-1-2015.
  */
 public class BaseFunctions
 {
+    private static List<WinkelLocatie> winkelLijst = new ArrayList<WinkelLocatie>(Arrays.asList(
+            new WinkelLocatie("Hanzehoge school Groningen", 90, 0, 90, 0)
+    ));
+
+
     public static void Log(String TAG, String message)
     {
         if (Variables.DEBUG)
@@ -41,5 +52,14 @@ public class BaseFunctions
                 SnackBar.show(activity, getErrorSnackBar(activity, "Een fout heeft zich voorgedaan probeer het alsjeblieft overnieuw!"));
             }
         });
+    }
+
+    public static WinkelLocatie inStoreRange(Location currentLocation)
+    {
+        for(WinkelLocatie winkel : winkelLijst)
+        {
+            if(winkel.userInRange(currentLocation)){ return winkel; }
+        }
+        return null;
     }
 }
