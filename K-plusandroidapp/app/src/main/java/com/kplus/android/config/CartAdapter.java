@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by bas on 23-1-15.
@@ -51,6 +52,11 @@ public class CartAdapter extends BaseAdapter
     {
         this.cart = cart;
         this.groceryList = cart.getCartLines();
+    }
+
+    public Map<String, Integer> getScannedProducts()
+    {
+        return scannedProducts;
     }
 
     public CartLineResponse getCartlineWithProductId(int productId)

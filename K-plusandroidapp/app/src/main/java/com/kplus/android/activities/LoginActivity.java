@@ -76,8 +76,6 @@ public class LoginActivity extends Activity
 
                     session.createLoginSession(user.getEmail(), user.getName(), mPassword.getText().toString());
 
-                    //APIClient.setCredentials(user.getEmail(), mPassword.getText().toString());
-
                     SnackBar.show(activity, getResources().getString(R.string.success_login));
 
                     Intent startMain = new Intent(activity, MainActivity.class);

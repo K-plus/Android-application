@@ -20,7 +20,7 @@ import java.util.List;
 public class BaseFunctions
 {
     private static List<WinkelLocatie> winkelLijst = new ArrayList<WinkelLocatie>(Arrays.asList(
-            new WinkelLocatie("Hanzehoge school Groningen", 90, 0, 90, 0)
+            new WinkelLocatie("Hanzehoge school Groningen", "/ads/store/1", 90, 0, 90, 0)
     ));
 
 
@@ -39,6 +39,16 @@ public class BaseFunctions
                 .setActionMessage(context.getResources().getString(R.string.snackbar_error))
                 .setActionMessageColor(context.getResources().getColor(R.color.Tomato))
                 .setDuration(3000)
+                .build();
+    }
+
+    public static SnackBarItem getAdSnackBar(Context context, String ad)
+    {
+        return new SnackBarItem.Builder()
+                .setMessage(ad)
+                .setActionMessage("ACTIE")
+                .setActionMessageColor(context.getResources().getColor(R.color.GreenYellow))
+                .setDuration(30000)
                 .build();
     }
 

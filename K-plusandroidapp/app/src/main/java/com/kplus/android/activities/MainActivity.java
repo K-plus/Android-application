@@ -34,10 +34,12 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefMessageCallback
 {
@@ -84,6 +86,50 @@ public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefM
             NdefMessage message = (NdefMessage) rawMessages[0]; // only one message transferred
             BaseFunctions.Log(TAG, "NFC Berichtontvangen: " + new String(message.getRecords()[0].getPayload()));
             SnackBar.show(this, new String(message.getRecords()[0].getPayload()));
+
+            List<CartLineResponse> cartList = adapter.getCart().getCartLines();
+            Map<String, Integer> scannedProducts = adapter.getScannedProducts();
+            JSONArray purchasedProductObjects = new JSONArray();
+            for(CartLineResponse product : cartList)
+            {
+                JSONObject purchasedProduct = new JSONObject();
+                try
+                {
+                    purchasedProduct.put("id", product.getProduct().getId());
+                    purchasedProduct.put("quantity", scannedProducts.get(product.getProduct().getEan().replaceFirst("^0+(?!$)", "")));
+                    purchasedProductObjects.put(purchasedProduct);
+                }
+                catch(Exception e){ e.printStackTrace(); }
+            }
+
+            RequestParams params = new RequestParams();
+            params.put("products", purchasedProductObjects);
+
+            BaseFunctions.Log(TAG, purchasedProductObjects.toString());
+
+            APIClient.post("/order/add", params, new JsonHttpResponseHandler()
+            {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+                {
+                    BaseFunctions.Log(TAG, "Boodschappenlijst verwerkt [Gecleared/voorraad aangepast]\n >>" + response);
+                    loadShoppingList();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
+                {
+                    try
+                    {
+                        BaseFunctions.Log(TAG, "Failed to process cart [Error: " + response.getJSONObject("error").getString("message") + "]");
+                        SnackBar.show(activity, BaseFunctions.getErrorSnackBar(activity, response.getJSONObject("error").getString("message")));
+                    }
+                    catch (Exception e)
+                    {
+                        BaseFunctions.handleException(activity, e);
+                    }
+                }
+            });
 
         }
         else{BaseFunctions.Log(TAG, "Waiting for NDEF Message");}
@@ -180,10 +226,38 @@ public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefM
 
             if(winkelInRange != null)
             {
-                BaseFunctions.Log(TAG, "Gebruiker is in range van de winkel: " + winkelInRange.getName());
+                BaseFunctions.Log(TAG, "Gebruiker is in range van de winkel: " + winkelInRange.getName() + " [" + winkelInRange.getAdUrl() + "]");
 
-                SnackBar.show(this, "KAAS VOOR 5 EURO KOOP T NU :D");
-                //Todo ad laten zien hiero :D
+                APIClient.get(winkelInRange.getAdUrl(), null, new JsonHttpResponseHandler()
+                {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+                    {
+                        try
+                        {
+                            String adMessage = response.getJSONObject("data").getString("text");
+                            SnackBar.show(activity, BaseFunctions.getAdSnackBar(activity, adMessage));
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
+                    {
+                        try
+                        {
+                            BaseFunctions.Log(TAG, "Failed to retrieve error [Error: " + response.getJSONObject("error").getString("message") + "]");
+                            SnackBar.show(activity, BaseFunctions.getErrorSnackBar(activity, response.getJSONObject("error").getString("message")));
+                        }
+                        catch (Exception e)
+                        {
+                            BaseFunctions.handleException(activity, e);
+                        }
+                    }
+                });
             }
             else
             {
@@ -249,11 +323,12 @@ public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefM
         billToSend = "";
         int priceToPay = 0;
         List<CartLineResponse> cartList = adapter.getCart().getCartLines();
+        Map<String, Integer> scannedProducts = adapter.getScannedProducts();
         for(CartLineResponse product : cartList)
         {
-            int totalPrice = product.getQty() * product.getProduct().getPrice();
-            BaseFunctions.Log(TAG, product.getProduct().getName() + " kost totaal: " + product.getQty() + " * " + product.getProduct().getPrice() + " = " + totalPrice);
+            int totalPrice = scannedProducts.get(product.getProduct().getEan().replaceFirst("^0+(?!$)", "")) * product.getProduct().getPrice();
             priceToPay += totalPrice;
+            BaseFunctions.Log(TAG, product.getProduct().getName() + " kost totaal: " + scannedProducts.get(product.getProduct().getEan().replaceFirst("^0+(?!$)", "")) + "[" + priceToPay + "] * " + product.getProduct().getPrice() + " = " + totalPrice);
         }
 
         billToSend = String.valueOf(priceToPay);
@@ -261,8 +336,6 @@ public class MainActivity extends ListActivity implements NfcAdapter.CreateNdefM
         nfcAdapter.setNdefPushMessageCallback(this, this);
 
         SnackBar.show(this, "Houd uw mobiel tegen de kassa aan om de producten over te sturen");
-
-        //Eventuele code om de shopping cart te legen
     }
 
     @Override

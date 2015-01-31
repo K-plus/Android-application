@@ -9,11 +9,12 @@ public class WinkelLocatie
 {
     private double maxLongitude, minLongitude;
     private double maxLatitude, minLatitude;
-    private String name;
+    private String name, adUrl;
 
-    public WinkelLocatie(String name, double maxLongitude, double minLongitude, double maxLatitude, double minLatitude)
+    public WinkelLocatie(String name, String adUrl, double maxLongitude, double minLongitude, double maxLatitude, double minLatitude)
     {
         this.name = name;
+        this.adUrl = adUrl;
         this.maxLongitude = maxLongitude;
         this.minLongitude = minLongitude;
         this.maxLatitude  = maxLatitude;
@@ -21,6 +22,7 @@ public class WinkelLocatie
     }
 
     public String getName(){ return name; }
+    public String getAdUrl(){ return adUrl; }
     public double getMaxLongitude(){ return maxLongitude; }
     public double getMinLongitude(){ return minLongitude; }
     public double getMaxLatitude(){ return maxLatitude; }
